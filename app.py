@@ -4,24 +4,21 @@ from werkzeug.security import generate_password_hash, check_password_hash
 import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
+import os
+from config import Config
 
 app = Flask(__name__)
-app.secret_key = 'your_secret_key_here'  # Change this to a real secret key
+app.config.from_object(Config)  # Load configuration from config.py
 
-# Configure MySQL
-app.config['MYSQL_HOST'] = 'localhost'
-app.config['MYSQL_USER'] = 'root'
-app.config['MYSQL_PASSWORD'] = 'Sat123@@'
-app.config['MYSQL_DB'] = 'quiz_app_1'
 mysql = MySQL(app)
 
 # Email configuration
-EMAIL_ADDRESS = 'sathishns035@gmail.com'  # Your email
-EMAIL_PASSWORD = 'swdnmhvscoviafyz'  # Your email password
+EMAIL_ADDRESS = os.environ.get('EMAIL_ADDRESS')
+EMAIL_PASSWORD = os.environ.get('EMAIL_PASSWORD')
 
 # Send quiz results to user and admin
 def send_results(email, username, score, total):
-    admin_email = 'sathishns035@gmail.com'
+    admin_email = os.environ.get('ADMIN_EMAIL')
     subject = 'Quiz Results'
     body = f"""
     Hi {username},
@@ -149,4 +146,3 @@ def submit_quiz():
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=True)
-
