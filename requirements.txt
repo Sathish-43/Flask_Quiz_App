@@ -1,0 +1,3 @@
+Flask-MySQLdb
+Flask
+Werkzeug
